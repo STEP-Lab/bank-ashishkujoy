@@ -5,8 +5,13 @@ public class Account {
     private final double minimumBalance=500;
     private double balance;
 
+    private static boolean isInvalidAccountNumber(String accountNumber) {
+        boolean isNotCorrectlyFormatted = !accountNumber.matches("^(\\d+)(-)(\\d+)$");
+        return isNotCorrectlyFormatted || accountNumber.length()!=9;
+    }
+
     public Account(String accountNumber, String name, double balance) throws MinimumBalanceException, InvalidAccountNumber {
-        if(!Validator.isValidAccountNumber(accountNumber)){
+        if(isInvalidAccountNumber(accountNumber)){
             throw new InvalidAccountNumber();
         }
         this.accountNumber = accountNumber;
