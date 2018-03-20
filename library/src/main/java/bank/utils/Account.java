@@ -6,8 +6,7 @@ public class Account {
     private double balance;
 
     private static boolean isInvalidAccountNumber(String accountNumber) {
-        boolean isNotCorrectlyFormatted = !accountNumber.matches("^(\\d+)(-)(\\d+)$");
-        return isNotCorrectlyFormatted || accountNumber.length()!=9;
+        return !accountNumber.matches("^\\d{4}-\\d{4}$");
     }
 
     public Account(String accountNumber, String name, double balance) throws MinimumBalanceException, InvalidAccountNumber {

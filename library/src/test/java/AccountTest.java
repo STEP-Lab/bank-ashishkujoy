@@ -38,7 +38,7 @@ public class AccountTest {
 
     @Test (expected = InvalidAccountNumber.class)
     public void validateAccountNumber() throws MinimumBalanceException, InvalidAccountNumber {
-        new Account("1234-23","ashish",2000);
+        new Account("1234-abcd","ashish",2000);
     }
 
     @Test
