@@ -12,7 +12,7 @@ public class Account {
         this.accountNumber = accountNumber;
         this.name = name;
         if(balance<this.minimumBalance){
-            throw new MinimumBalanceException();
+            throw new MinimumBalanceException("Insufficient balance to open account.");
         }
         this.balance = balance;
     }
@@ -29,8 +29,17 @@ public class Account {
         return balance;
     }
 
-    public double debit(double amount) {
+    public double debit(double amount) throws MinimumBalanceException {
+        if(this.balance-amount<this.minimumBalance){
+            throw new MinimumBalanceException("Insufficient balance to withdraw");
+        }
         this.balance -= amount;
         return this.balance;
     }
+
+    public double credit(double amount) {
+        this.balance += amount;
+        return this.balance;
+    }
+
 }
