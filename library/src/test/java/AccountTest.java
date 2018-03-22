@@ -1,4 +1,5 @@
 import bank.utils.Account;
+import bank.utils.AccountNumber;
 import bank.utils.InvalidAccountNumber;
 import bank.utils.MinimumBalanceException;
 import org.junit.Before;
@@ -13,12 +14,7 @@ public class AccountTest {
     private Account account;
     @Before
     public void setUp() throws MinimumBalanceException, InvalidAccountNumber {
-        account = new Account("1234-5678", "ashish", 1000);
-    }
-
-    @Test
-    public void getAccountNumber() {
-        assertThat(account.getAccountNumber(),is("1234-5678"));
+        account = new Account(new AccountNumber("1234-5678"), "ashish", 1000);
     }
 
     @Test
@@ -33,12 +29,7 @@ public class AccountTest {
 
     @Test(expected = MinimumBalanceException.class)
     public void checkMinimumBalance() throws MinimumBalanceException, InvalidAccountNumber {
-        new Account("1234-5678", "ashish",100);
-    }
-
-    @Test (expected = InvalidAccountNumber.class)
-    public void validateAccountNumber() throws MinimumBalanceException, InvalidAccountNumber {
-        new Account("1234-abcd","ashish",2000);
+        new Account(new AccountNumber("1234-5678"), "ashish",100);
     }
 
     @Test
