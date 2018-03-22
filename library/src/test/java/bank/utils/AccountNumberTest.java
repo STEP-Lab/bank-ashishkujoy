@@ -1,3 +1,5 @@
+package bank.utils;
+
 import bank.utils.AccountNumber;
 import bank.utils.InvalidAccountNumber;
 import org.junit.Test;
