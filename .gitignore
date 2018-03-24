@@ -114,8 +114,6 @@ build/
 .settings/
 .vscode/
 gradle/
-gradlew
-gradlew.bat
 .gradle
 .project
 application/build
