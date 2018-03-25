@@ -1,6 +1,5 @@
 package bank.utils;
 
-import bank.utils.Transactions;
 import org.junit.Test;
 
 import java.util.Date;
@@ -14,5 +13,12 @@ public class TransactionsTest {
         Transactions transactions = new Transactions();
         transactions.debit(1000,"ashish");
         assertThat(transactions.transactions,hasItem(new Debit(new Date(),1000,"ashish")));
+    }
+
+    @Test
+    public void mustRecordACreditTransaction() {
+        Transactions transactions = new Transactions();
+        transactions.credit(1000,"ashish");
+        assertThat(transactions.transactions,hasItem(new Credit(new Date(),1000,"ashish")));
     }
 }

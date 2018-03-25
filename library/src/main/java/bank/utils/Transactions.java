@@ -13,4 +13,9 @@ public class Transactions {
         Transaction debit = new Debit(amount,source);
         this.transactions.add(debit);
     }
+
+    public void credit(double amount, String source) {
+        Transaction credit = new Credit(amount,source);
+        this.transactions.add(credit);
+    }
 }

@@ -2,16 +2,21 @@ package bank.utils;
 public class Account {
     private final AccountNumber accountNumber;
     private final String name;
-    private final double minimumBalance=500;
+    private static final double minimumBalance=500;
     private double balance;
 
-    public Account(AccountNumber accountNumber, String name, double balance) throws MinimumBalanceException {
+    private Account(AccountNumber accountNumber, String name, double balance) {
         this.accountNumber = accountNumber;
         this.name = name;
-        if(balance<this.minimumBalance){
+        this.balance = balance;
+    }
+
+    public static Account createAccount(String number,String name, double balance) throws InvalidAccountNumber, MinimumBalanceException {
+        AccountNumber accountNumber = new AccountNumber(number);
+        if(balance<minimumBalance){
             throw new MinimumBalanceException("Insufficient balance to open account.");
         }
-        this.balance = balance;
+        return new Account(accountNumber,name,balance);
     }
 
     public String getName() {
