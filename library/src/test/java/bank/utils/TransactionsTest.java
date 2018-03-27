@@ -122,7 +122,7 @@ public class TransactionsTest {
         double[] creditAmount = {1100,1200};
         double[] debitAmount = {500};
         ArrayList<String> result = new ArrayList<>();
-        String headers = "date,amount,source";
+        String headers = "date,amount,source,type";
         transactions = initTransactions(transactions, creditAmount,debitAmount);
         Credit credit = new Credit(1100,"Someone");
         CsvPrinter csvPrinter;
@@ -138,18 +138,7 @@ public class TransactionsTest {
         csvPrinter.writeHeaders();
         transactions.iterateOnTransactions(csvPrinter);
         assertThat(result,hasItems(headers,credit.getSource(),String.valueOf(credit.getAmount())));
+        csvPrinter.close();
     }
 
-    @Test
-    public void foo() throws IOException {
-        double[] creditAmount = {1100,1200};
-        double[] debitAmount = {500};
-        String headers = "date,amount,source";
-        transactions = initTransactions(transactions, creditAmount,debitAmount);
-        FileWriter fileWriter = new FileWriter("foo.csv");
-        CsvPrinter csvPrinter = new CsvPrinter(fileWriter, headers);
-        csvPrinter.writeHeaders();
-        transactions.iterateOnTransactions(csvPrinter);
-        csvPrinter.closs();
-    }
 }

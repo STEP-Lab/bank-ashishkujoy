@@ -21,16 +21,26 @@ public class CsvPrinter implements Iterable{
 
     @Override
     public void iterateOverTransactions(Transaction transaction) throws IOException {
+        String transactionType = "CREDIT";
+        if(transaction.isDebitTransaction()){
+            transactionType = "DEBIT";
+        }
         writer.append(transaction.getDate().toString());
         writer.append(COMMA_DELIMITER);
         writer.append(String.valueOf(transaction.getAmount()));
         writer.append(COMMA_DELIMITER);
         writer.append(transaction.getSource());
+        writer.append(COMMA_DELIMITER);
+        writer.append(transactionType);
         writer.append(NEW_LINE_SEPARATOR);
     }
 
-    public void closs() throws IOException {
-        writer.flush();
-        writer.close();
+    public void close() throws IOException {
+        try{
+            writer.flush();
+            writer.close();
+        }catch (Exception e){
+            return;
+        }
     }
 }
