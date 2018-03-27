@@ -15,6 +15,26 @@ import static org.junit.Assert.assertThat;
 public class TransactionsTest {
 
     private Transactions transactions;
+    private Debit debitOf1000;
+    private Debit debitOf100;
+    private Debit debitOf1500;
+    private Debit debitOf1200;
+    private Credit creditOf1500;
+    private Credit creditOf1000;
+    private Credit creditOf100;
+    private Credit creditOf1200;
+
+    @Before
+    public void transactionsSetup() {
+        debitOf1000 = new Debit(1000, "Someone");
+        debitOf100 = new Debit(100, "Someone");
+        debitOf1500 = new Debit(1500, "Someone");
+        debitOf1200 = new Debit(1200, "Someone");
+        creditOf1500 = new Credit(1500,"Someone");
+        creditOf1000 = new Credit(1000,"Someone");
+        creditOf100 = new Credit(100,"Someone");
+        creditOf1200 = new Credit(1200,"Someone");
+    }
 
     @Before
     public void setUp() {
@@ -33,23 +53,21 @@ public class TransactionsTest {
 
     @Test
     public void mustRecordADebitTransaction() {
-        transactions.debit(1000,"ashish");
-        assertThat(transactions.transactions,hasItem(new Debit(new Date(),1000,"ashish")));
+        transactions.debit(1000,"Someone");
+        assertThat(transactions.transactions,hasItem(debitOf1000));
     }
 
     @Test
     public void mustRecordACreditTransaction() {
-        transactions.credit(1000,"ashish");
-        assertThat(transactions.transactions,hasItem(new Credit(new Date(),1000,"ashish")));
+        transactions.credit(1000,"Someone");
+        assertThat(transactions.transactions,hasItem(creditOf1000));
     }
 
     @Test
     public void mustRecordCreditAndDebitTransaction() {
         transactions.credit(1000,"Someone");
         transactions.debit(1000,"Someone");
-        Credit credit = new Credit(new Date(),1000,"Someone");
-        Debit debit = new Debit(new Date(),1000,"Someone");
-        assertThat(transactions.transactions,hasItems(credit,debit));
+        assertThat(transactions.transactions,hasItems(creditOf1000,debitOf1000));
     }
 
     @Test
@@ -63,68 +81,53 @@ public class TransactionsTest {
         };
         transactions.credit(1000,"Someone");
         transactions.debit(1000,"Someone");
-        Credit credit = new Credit(1000,"Someone");
-        Debit debit = new Debit(1000,"Someone");
         transactions.print(printWriter);
-        assertThat(result,hasItems(credit.toString(),debit.toString()));
+        assertThat(result,hasItems(creditOf1000.toString(),debitOf1000.toString()));
     }
 
     @Test
     public void shouldGiveTransactionAboveGivenAmount() {
-        double[] creditAmount = {1100.0};
-        double[] debitAmount = {1200,500};
+        double[] creditAmount = {1000,100};
+        double[] debitAmount = {1500};
         transactions = initTransactions(transactions, creditAmount,debitAmount);
-        Credit credit = new Credit(1100,"Someone");
-        Debit debit = new Debit(1200,"Someone");
-        Debit debit2 = new Debit(500,"Someone");
-        assertThat(transactions.getTransactionsAbove(1000).transactions,hasItems(credit,debit));
-        assertThat(transactions.getTransactionsAbove(1000).transactions,not(hasItems(debit2)));
+        assertThat(transactions.getTransactionsAbove(100).transactions,hasItems(creditOf1000,debitOf1500));
+        assertThat(transactions.getTransactionsAbove(100).transactions,not(hasItems(debitOf100)));
     }
 
     @Test
     public void shouldGiveTransactionBelowGivenAmount() {
-        double[] creditAmount = {1100.0};
-        double[] debitAmount = {1200,500};
+        double[] creditAmount = {1000,100};
+        double[] debitAmount = {1200,100};
         transactions = initTransactions(transactions, creditAmount,debitAmount);
-        Credit credit = new Credit(1100,"Someone");
-        Debit debit = new Debit(1200,"Someone");
-        Debit debit2 = new Debit(500,"Someone");
-        assertThat(transactions.getTransactionsBelow(1200).transactions,hasItems(credit,debit2));
-        assertThat(transactions.getTransactionsAbove(1200).transactions,not(hasItems(debit)));
+        assertThat(transactions.getTransactionsBelow(1200).transactions,hasItems(creditOf1000,creditOf100,debitOf100));
+        assertThat(transactions.getTransactionsBelow(1200).transactions,not(hasItems(debitOf1200)));
     }
 
     @Test
     public void shouldGiveAllCreditTransaction() {
-        double[] creditAmount = {1100,1200};
-        double[] debitAmount = {500};
+        double[] creditAmount = {1000,1500};
+        double[] debitAmount = {100};
         transactions = initTransactions(transactions, creditAmount,debitAmount);
-        Credit credit = new Credit(1100,"Someone");
-        Credit credit1 = new Credit(1200,"Someone");
-        Debit debit = new Debit(500,"Someone");
-        assertThat(transactions.getCreditTransactions().transactions,hasItems(credit,credit1));
-        assertThat(transactions.getCreditTransactions().transactions,not(hasItems(debit)));
+        assertThat(transactions.getCreditTransactions().transactions,hasItems(creditOf1000,creditOf1500));
+        assertThat(transactions.getCreditTransactions().transactions,not(hasItems(debitOf100)));
     }
 
     @Test
     public void shouldGiveAllDebitTransactions() {
-        double[] creditAmount = {1100,1200};
-        double[] debitAmount = {500};
+        double[] creditAmount = {1000,1500};
+        double[] debitAmount = {100};
         transactions = initTransactions(transactions, creditAmount,debitAmount);
-        Credit credit = new Credit(1100,"Someone");
-        Credit credit1 = new Credit(1200,"Someone");
-        Debit debit = new Debit(500,"Someone");
-        assertThat(transactions.getDebitTransactions().transactions,hasItems(debit));
-        assertThat(transactions.getDebitTransactions().transactions,not(hasItems(credit,credit1)));
+        assertThat(transactions.getDebitTransactions().transactions,hasItems(debitOf100));
+        assertThat(transactions.getDebitTransactions().transactions,not(hasItems(creditOf1000,creditOf1500)));
     }
 
     @Test
     public void should_write_to_csv_file() throws IOException {
-        double[] creditAmount = {1100,1200};
-        double[] debitAmount = {500};
+        double[] creditAmount = {1000};
+        double[] debitAmount = {};
         ArrayList<String> result = new ArrayList<>();
         String headers = "date,amount,source,type";
         transactions = initTransactions(transactions, creditAmount,debitAmount);
-        Credit credit = new Credit(1100,"Someone");
         CsvPrinter csvPrinter;
         try (FileWriter fileWriter = new FileWriter("foo.csv") {
             @Override
@@ -137,7 +140,11 @@ public class TransactionsTest {
         }
         csvPrinter.writeHeaders();
         transactions.iterateOnTransactions(csvPrinter);
-        assertThat(result,hasItems(headers,credit.getSource(),String.valueOf(credit.getAmount())));
+        assertThat(result,hasItems(headers,creditOf1000.getSource(),String.valueOf(creditOf1000.getAmount()),"CREDIT"));
+        assertThat(result,not(hasItems("DEBIT")));
+        transactions.debit(100,"AnotherAccount");
+        transactions.iterateOnTransactions(csvPrinter);
+        assertThat(result,hasItems("DEBIT"));
         csvPrinter.close();
     }
 
