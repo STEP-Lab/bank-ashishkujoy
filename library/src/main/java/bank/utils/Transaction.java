@@ -55,4 +55,8 @@ public abstract class Transaction {
     public String getSource() {
         return source;
     }
+
+    public boolean isDebitTransaction() {
+        return isDebit;
+    }
 }

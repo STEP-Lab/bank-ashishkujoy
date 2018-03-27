@@ -50,7 +50,6 @@ public class Transactions {
     public Transactions getCreditTransactions() {
         Transactions requiredTransaction = new Transactions();
         for(Transaction transaction : transactions){
-
             if(transaction.isCreditTransaction()){
                 requiredTransaction.transactions.add(transaction);
             }
@@ -62,5 +61,15 @@ public class Transactions {
         for(Transaction transaction : transactions){
             iterable.iterateOverTransactions(transaction);
         }
+    }
+
+    public Transactions getDebitTransactions() {
+        Transactions requiredTransaction = new Transactions();
+        for(Transaction transaction : transactions){
+            if(transaction.isDebitTransaction()){
+                requiredTransaction.transactions.add(transaction);
+            }
+        }
+        return requiredTransaction;
     }
 }

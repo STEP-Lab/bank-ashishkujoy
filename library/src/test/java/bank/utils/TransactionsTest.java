@@ -106,6 +106,18 @@ public class TransactionsTest {
     }
 
     @Test
+    public void shouldGiveAllDebitTransactions() {
+        double[] creditAmount = {1100,1200};
+        double[] debitAmount = {500};
+        transactions = initTransactions(transactions, creditAmount,debitAmount);
+        Credit credit = new Credit(1100,"Someone");
+        Credit credit1 = new Credit(1200,"Someone");
+        Debit debit = new Debit(500,"Someone");
+        assertThat(transactions.getDebitTransactions().transactions,hasItems(debit));
+        assertThat(transactions.getDebitTransactions().transactions,not(hasItems(credit,credit1)));
+    }
+
+    @Test
     public void should_write_to_csv_file() throws IOException {
         double[] creditAmount = {1100,1200};
         double[] debitAmount = {500};
@@ -126,5 +138,18 @@ public class TransactionsTest {
         csvPrinter.writeHeaders();
         transactions.iterateOnTransactions(csvPrinter);
         assertThat(result,hasItems(headers,credit.getSource(),String.valueOf(credit.getAmount())));
+    }
+
+    @Test
+    public void foo() throws IOException {
+        double[] creditAmount = {1100,1200};
+        double[] debitAmount = {500};
+        String headers = "date,amount,source";
+        transactions = initTransactions(transactions, creditAmount,debitAmount);
+        FileWriter fileWriter = new FileWriter("foo.csv");
+        CsvPrinter csvPrinter = new CsvPrinter(fileWriter, headers);
+        csvPrinter.writeHeaders();
+        transactions.iterateOnTransactions(csvPrinter);
+        csvPrinter.closs();
     }
 }
