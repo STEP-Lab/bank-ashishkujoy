@@ -3,9 +3,7 @@ package bank.utils;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -19,7 +17,7 @@ public class TransactionsTest {
     private Transactions transactions;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         transactions = new Transactions();
     }
 
@@ -105,5 +103,28 @@ public class TransactionsTest {
         Debit debit = new Debit(500,"Someone");
         assertThat(transactions.getCreditTransactions().transactions,hasItems(credit,credit1));
         assertThat(transactions.getCreditTransactions().transactions,not(hasItems(debit)));
+    }
+
+    @Test
+    public void writingToCsvFile() throws IOException {
+        double[] creditAmount = {1100,1200};
+        double[] debitAmount = {500};
+        ArrayList<String> result = new ArrayList<>();
+        String headers = "date,amount,source";
+        transactions = initTransactions(transactions, creditAmount,debitAmount);
+        Credit credit = new Credit(1100,"Someone");
+        CsvPrinter csvPrinter;
+        try (FileWriter fileWriter = new FileWriter("foo.csv") {
+            @Override
+            public Writer append(CharSequence csq) {
+                result.add((String) csq);
+                return this;
+            }
+        }) {
+            csvPrinter = new CsvPrinter(fileWriter, headers);
+        }
+        csvPrinter.writeHeaders();
+        transactions.iterateOnTransactions(csvPrinter);
+        assertThat(result,hasItems(headers,credit.getSource(),String.valueOf(credit.getAmount())));
     }
 }

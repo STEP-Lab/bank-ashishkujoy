@@ -51,4 +51,8 @@ public abstract class Transaction {
     public boolean isCreditTransaction() {
         return isCredit;
     }
+
+    public String getSource() {
+        return source;
+    }
 }

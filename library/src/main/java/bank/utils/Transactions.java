@@ -1,5 +1,6 @@
 package bank.utils;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
@@ -55,5 +56,11 @@ public class Transactions {
             }
         }
         return requiredTransaction;
+    }
+
+    public void iterateOnTransactions(Iterable iterable) throws IOException {
+        for(Transaction transaction : transactions){
+            iterable.iterateOverTransactions(transaction);
+        }
     }
 }
