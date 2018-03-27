@@ -28,10 +28,4 @@ public class CsvPrinter implements Iterable{
         writer.append(transaction.getSource());
         writer.append(NEW_LINE_SEPARATOR);
     }
-    @Override
-    public void close() throws IOException {
-        writer.flush();
-        writer.close();
-
-    }
 }

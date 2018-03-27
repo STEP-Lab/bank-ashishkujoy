@@ -5,7 +5,4 @@ import java.util.function.Consumer;
 
 public interface Iterable {
     void iterateOverTransactions(Transaction transaction) throws IOException;
-
-
-    void close() throws IOException;
 }

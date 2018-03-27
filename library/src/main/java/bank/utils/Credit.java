@@ -13,11 +13,4 @@ public class Credit extends Transaction {
         this(new Date(), amount, from);
     }
 
-    public boolean isCredit() {
-        return true;
-    }
-
-    public boolean isDebit() {
-        return true;
-    }
 }

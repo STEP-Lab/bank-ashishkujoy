@@ -106,7 +106,7 @@ public class TransactionsTest {
     }
 
     @Test
-    public void writingToCsvFile() throws IOException {
+    public void should_write_to_csv_file() throws IOException {
         double[] creditAmount = {1100,1200};
         double[] debitAmount = {500};
         ArrayList<String> result = new ArrayList<>();
